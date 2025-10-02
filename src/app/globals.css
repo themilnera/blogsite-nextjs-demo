@@ -1,8 +1,17 @@
 @import "tailwindcss";
+@import "../styles/_variables.scss";
+@import "../styles/_keyframe-animations.scss";
+
+html{
+  background-color: #0a0a0a !important;
+}
 
 :root {
-  --background: #ffffff;
+  --background: #1e1d1d ;
   --foreground: #171717;
+}
+.tiptap{
+  width: 100%;
 }
 
 @theme inline {
@@ -15,7 +24,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #3e3e3e;
   }
 }
 
