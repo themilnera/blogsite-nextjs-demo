@@ -15,13 +15,14 @@ import {
   loginUserAccount,
   getLoggedInUser,
   getUserDocs,
-  deleteDoc
+  deleteDoc,
 } from "@/database/functions";
 import { ID } from "appwrite";
 import { useRouter } from "next/navigation";
 import { toggleList } from "@/components/tiptap-ui/list-button";
 
 export default function user() {
+  const [loaded, setLoaded] = useState(false);
   const router = useRouter();
   const [session, setSession] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -56,6 +57,7 @@ export default function user() {
       } else {
         setSession(null);
       }
+      setLoaded(true);
     };
     checkLoggedIn();
   }, []);
@@ -113,16 +115,16 @@ export default function user() {
     }
   };
 
-  const attemptDelete = async (docId) =>{
+  const attemptDelete = async (docId) => {
     try {
-        deleteDoc({ rowId: docId }).then((result)=>{
-            const newUserDocs = userDocs.filter((doc)=> doc.$id != docId);
-            setUserDocs(newUserDocs);
-        });
+      deleteDoc({ rowId: docId }).then((result) => {
+        const newUserDocs = userDocs.filter((doc) => doc.$id != docId);
+        setUserDocs(newUserDocs);
+      });
     } catch (error) {
-        console.log("Failure to delete document, error: ", error);
+      console.log("Failure to delete document, error: ", error);
     }
-  }
+  };
 
   const handleEmail = (event) => {
     setEmail(event.currentTarget.value);
@@ -136,80 +138,84 @@ export default function user() {
 
   return (
     <>
-      {!session ? (
-        login ? (
-          <div className="w-full h-200 flex justify-center items-center">
-            <div className="w-50 flex flex-col justify-center items-center gap-4">
-              <TextInput
-                placeholder="Email"
-                value={email}
-                onChange={handleEmail}
-              />
-              <TextInput
-                placeholder="Password"
-                type="password"
-                value={password}
-                onChange={handlePassword}
-              />
-              <Button radius="lg" onClick={attemptLogin}>
-                {loginText}
-              </Button>
+      {loaded ? (
+        !session ? (
+          login ? (
+            <div className="w-full h-200 flex justify-center items-center">
+              <div className="w-50 flex flex-col justify-center items-center gap-4">
+                <TextInput
+                  placeholder="Email"
+                  value={email}
+                  onChange={handleEmail}
+                />
+                <TextInput
+                  placeholder="Password"
+                  type="password"
+                  value={password}
+                  onChange={handlePassword}
+                />
+                <Button radius="lg" onClick={attemptLogin}>
+                  {loginText}
+                </Button>
 
-              <Anchor onClick={toggleLogin}>Register Account</Anchor>
+                <Anchor onClick={toggleLogin}>Register Account</Anchor>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="w-full h-200 flex justify-center items-center">
+              <div className="w-50 flex flex-col justify-center items-center gap-4">
+                <TextInput
+                  placeholder="Email"
+                  value={email}
+                  onChange={handleEmail}
+                />
+                <TextInput
+                  placeholder="Password"
+                  type="password"
+                  value={password}
+                  onChange={handlePassword}
+                />
+                <TextInput
+                  placeholder="Repeat Password"
+                  type="password"
+                  value={verifyPassword}
+                  onChange={handleVerifyPassword}
+                />
+                <Button radius="lg" onClick={attemptRegister}>
+                  {registerText}
+                </Button>
+
+                <Anchor onClick={toggleLogin}>Login</Anchor>
+              </div>
+            </div>
+          )
         ) : (
-          <div className="w-full h-200 flex justify-center items-center">
-            <div className="w-50 flex flex-col justify-center items-center gap-4">
-              <TextInput
-                placeholder="Email"
-                value={email}
-                onChange={handleEmail}
-              />
-              <TextInput
-                placeholder="Password"
-                type="password"
-                value={password}
-                onChange={handlePassword}
-              />
-              <TextInput
-                placeholder="Repeat Password"
-                type="password"
-                value={verifyPassword}
-                onChange={handleVerifyPassword}
-              />
-              <Button radius="lg" onClick={attemptRegister}>
-                {registerText}
-              </Button>
-
-              <Anchor onClick={toggleLogin}>Login</Anchor>
-            </div>
-          </div>
-        )
-      ) : (
-        <>
-          {/* if logged in */}
-          <h1 className="text-center mt-30 underline text-2xl">My Documents</h1>
-          <div className="flex flex-wrap ml-100 mr-100 mt-10">
-            {userDocs.length > 0 ? (
-              userDocs.map((doc) => {
-                return (
+          <>
+            {/* if logged in */}
+            <h1 className="text-center mt-30 underline text-2xl">
+              My Documents
+            </h1>
+            <div className="flex flex-wrap ml-100 mr-100 mt-10">
+              {userDocs.length > 0 ? (
+                userDocs.map((doc) => (
                   <Card key={doc.$id} w={200} className="ml-3 mt-5 mr-3">
                     <span className="flex">
-                      <NavLink
-                        href={`/create/${doc.$id}`}
-                        label={doc.title}
-                      ></NavLink>
-                      <CloseButton className="mt-2" onClick={()=>{attemptDelete(doc.$id)}}/>
+                      <NavLink href={`/create/${doc.$id}`} label={doc.title} />
+                      <CloseButton
+                        className="mt-2"
+                        onClick={() => attemptDelete(doc.$id)}
+                      />
                     </span>
                   </Card>
-                );
-              })
-            ) : (
-              <></>
-            )}
-          </div>
-        </>
+                ))
+              ) : (
+                <></>
+              )}
+            </div>
+          </>
+        )
+      ) : (
+        <></>
       )}
 
       {error && (
