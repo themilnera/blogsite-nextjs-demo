@@ -18,9 +18,10 @@ export default function Create({ docId }) {
   const [userDoc, setUserDoc] = useState(null);
 
   const handleEditorReady = (editorInstance) => {
-    if(userDoc)
+    if(userDoc){
         editorInstance.commands.setContent(JSON.parse(userDoc.content))
         setTitle(userDoc.title);
+    }
     setEditor(editorInstance);
   };
 

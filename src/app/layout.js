@@ -33,10 +33,12 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <MantineProvider defaultColorScheme="dark"> 
-          <div className="flex justify-center">
-            <NavBar />
-          </div>
-          {children}
+        <div className="w-full !h-full">
+            <div className="flex justify-center">
+              <NavBar />
+            </div>
+            {children}
+        </div>
         </MantineProvider>
       </body>
     </html>

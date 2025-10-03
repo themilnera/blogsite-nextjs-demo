@@ -1,12 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { TextInput, Button, Anchor, Card, Center, NavLink } from "@mantine/core";
+import {
+  TextInput,
+  Button,
+  Anchor,
+  Card,
+  Center,
+  NavLink,
+  CloseButton,
+} from "@mantine/core";
 import {
   createUserAccount,
   loginUserAccount,
   getLoggedInUser,
   getUserDocs,
+  deleteDoc
 } from "@/database/functions";
 import { ID } from "appwrite";
 import { useRouter } from "next/navigation";
@@ -104,6 +113,17 @@ export default function user() {
     }
   };
 
+  const attemptDelete = async (docId) =>{
+    try {
+        deleteDoc({ rowId: docId }).then((result)=>{
+            const newUserDocs = userDocs.filter((doc)=> doc.$id != docId);
+            setUserDocs(newUserDocs);
+        });
+    } catch (error) {
+        console.log("Failure to delete document, error: ", error);
+    }
+  }
+
   const handleEmail = (event) => {
     setEmail(event.currentTarget.value);
   };
@@ -174,8 +194,14 @@ export default function user() {
             {userDocs.length > 0 ? (
               userDocs.map((doc) => {
                 return (
-                  <Card key={doc.$id} w={200} ta="center">
-                    <NavLink href={`/create/${doc.$id}`} label={doc.title}></NavLink>
+                  <Card key={doc.$id} w={200} className="ml-3 mt-5 mr-3">
+                    <span className="flex">
+                      <NavLink
+                        href={`/create/${doc.$id}`}
+                        label={doc.title}
+                      ></NavLink>
+                      <CloseButton className="mt-2" onClick={()=>{attemptDelete(doc.$id)}}/>
+                    </span>
                   </Card>
                 );
               })

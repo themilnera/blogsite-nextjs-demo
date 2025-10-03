@@ -18,8 +18,8 @@ export default function NavBar() {
   }, []);
 
   return (
-    <div className="mt-5 flex w-65 gap-10">
-      <NavLink href="/" label="Home" />
+    <div className=" mt-5 flex gap-10 ">
+      <NavLink href="/" label="Home"/>
       <NavLink href="/create" label="Create" />
       <NavLink href="/user" label={userEmail} className="self-end"/>
     </div>

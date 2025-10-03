@@ -120,9 +120,7 @@ const MainToolbarContent = ({ onHighlighterClick, onLinkClick, isMobile }) => {
         <TextAlignButton align="justify" />
       </ToolbarGroup>
       <ToolbarSeparator />
-      <ToolbarGroup>
-        <ImageUploadButton text="Add" />
-      </ToolbarGroup>
+
       <Spacer />
       {isMobile && <ToolbarSeparator />}
       <ToolbarGroup>
@@ -191,13 +189,7 @@ export function SimpleEditor({ onEditorReady }) {
       Superscript,
       Subscript,
       Selection,
-      ImageUploadNode.configure({
-        accept: "image/*",
-        maxSize: MAX_FILE_SIZE,
-        limit: 3,
-        upload: handleImageUpload,
-        onError: (error) => console.error("Upload failed:", error),
-      }),
+
     ],
     content,
   });

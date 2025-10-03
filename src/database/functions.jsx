@@ -17,6 +17,14 @@ export const saveDoc = async ({ title, content, rowId, userId }) => {
   }
 };
 
+export const deleteDoc = async({ rowId }) =>{
+    try {
+        await tablesDB.deleteRow({ databaseId: databaseId, tableId: tableId, rowId: rowId });
+    } catch (error) {
+        console.log("Failed to delete DB entry, error: ", error);
+    }
+}
+
 export const updateDoc = async ({ title, content, rowId, userId }) => {
   try {
     await tablesDB.updateRow({
