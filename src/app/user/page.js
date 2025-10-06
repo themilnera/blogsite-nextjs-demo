@@ -21,7 +21,7 @@ import { ID } from "appwrite";
 import { useRouter } from "next/navigation";
 import { toggleList } from "@/components/tiptap-ui/list-button";
 
-export default function user() {
+export default function User() {
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
   const [session, setSession] = useState(null);
